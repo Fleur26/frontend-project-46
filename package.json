@@ -1,0 +1,27 @@
+{
+  "dependencies": {
+    "commander": "^12.0.0"
+  },
+  "name": "@hexlet/code",
+  "description": "[![Actions Status](https://github.com/Fleur26/frontend-project-46/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/Fleur26/frontend-project-46/actions)",
+  "type": "module",
+  "version": "1.0.0",
+  "main": "index.js",
+  "bin": {
+    "code": "bin/gendiff.js"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Fleur26/frontend-project-46.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Fleur26/frontend-project-46/issues"
+  },
+  "homepage": "https://github.com/Fleur26/frontend-project-46#readme"
+}
