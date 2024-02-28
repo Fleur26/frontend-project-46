@@ -7,5 +7,13 @@ const readFile = (filePath) => {
     return fs.readFileSync(fullPath, 'utf-8');
 }
 
-
-export {readFile};
+const findDiff = (obj1, obj2) => {
+const keys1 = Object.keys(obj1);
+const keys2 = Object.keys(obj2);
+const diffrents  = {};
+for (let key of keys1){   
+diffrents[key] = obj1[key];
+}
+return diffrents;
+}
+export {readFile, findDiff};
