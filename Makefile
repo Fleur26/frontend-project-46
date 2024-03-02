@@ -4,3 +4,5 @@ install:
 lint:
 		npx eslint .
 
+say-hello:
+		echo 'Hello, world!'
