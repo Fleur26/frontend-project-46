@@ -5,4 +5,6 @@
 
 [![Maintainability](https://api.codeclimate.com/v1/badges/b24d23f89d5a8cd0e479/maintainability)](https://codeclimate.com/github/Fleur26/frontend-project-46/maintainability)
 
+[![Test Coverage](https://api.codeclimate.com/v1/badges/b24d23f89d5a8cd0e479/test_coverage)](https://codeclimate.com/github/Fleur26/frontend-project-46/test_coverage)
+
 asciinema - https://asciinema.org/connect/e11c25ea-869f-4b90-a725-fa4bc7a5de76
