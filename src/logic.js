@@ -22,4 +22,6 @@ const diffrents  = _.sortBy(_.union(keys1,keys2)).map((key) => {
 })
 return `{\n${diffrents.join('\n')}\n}`;
 }
+
+
 export {readFile, findDiff};
