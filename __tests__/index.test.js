@@ -1,5 +1,5 @@
 import { test, expect } from '@jest/globals';
-import { findDiff } from '../src/logic.js';
+import genDiff from '../src/index.js';
 
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
@@ -11,5 +11,5 @@ const getFixturePath = (filename) => path.join(dirname, '..', '__fixtures__', fi
 const readFile = (filename) => fs.readFileSync(getFixturePath(filename), 'utf-8');
 
 test('float obj', () => {
-expect(findDiff(readFile(expected1.json), readFile(expected2.json))).expect(readFile(expected1.txt));
+expect(genDiff(getFixturePath(example1.json), getFixturePath(example2.json))).toEqual(readFile(expected1.txt));
 });
