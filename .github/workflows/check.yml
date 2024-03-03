@@ -9,8 +9,7 @@ jobs:
       - run: make install
       - run: make lint
       - run: npm run test
-      - run: npm test -- --coverage --coverageProvider=v8
-- name: Test & publish code coverage
+    - name: Test & publish code coverage
         # Publish code coverage on Code Climate
         # https://github.com/paambaati/codeclimate-action
         uses: paambaati/codeclimate-action@v4.0.0
