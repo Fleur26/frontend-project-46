@@ -12,6 +12,9 @@ const __dirname = dirname(__filename);
 const getFixturePath = (filename) => path.join(__dirname, '..', '__fixtures__', filename);
 const readFile = (filename) => fs.readFileSync(getFixturePath(filename), 'utf-8');
 
-test('float obj', () => {
+test('float obj, json', () => {
 expect(genDiff(getFixturePath('example1.json'), getFixturePath('example2.json'))).toEqual(readFile('expected1.txt'));
 });
+test('float obj, yml', () => {
+    expect(genDiff(getFixturePath('file1.yml'), getFixturePath('file2.yml'))).toEqual(readFile('expected1.txt'));
+    });
