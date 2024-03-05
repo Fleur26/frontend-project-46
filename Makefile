@@ -1,14 +1,11 @@
-install: 
-		npm ci
+install:
+	npm ci
 
 lint:
-		npx eslint .
+	npx eslint .
 
-say-hello:
-		echo 'Hello, world!'
-		
 test-coverage:
-  npm test -- --coverage --coverageProvider=v8
+	npm test -- --coverage --coverageProvider=v8
 
 test:
-  npm test
+	npm test
