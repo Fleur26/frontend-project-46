@@ -22,7 +22,9 @@ const diffrents  = _.sortBy(_.union(keys1,keys2)).map((key) => {
     if(Object.hasOwn(obj1, key) && Object.hasOwn(obj2, key)){
         return obj1[key] === obj2[key]? `  ${key} = ${obj1[key]}` : `- ${key} = ${obj1[key]}\n+ ${key} = ${obj2[key]}`
     }
-    
+    else if(typeof key === 'object'){
+        return `${key}: ${findDiff(key)}`;
+    }
     return obj1[key] === undefined?`+ ${key} = ${obj2[key]}` : `+ ${key} = ${obj1[key]}`;
 })
 return `{\n${diffrents.join('\n')}\n}`;
