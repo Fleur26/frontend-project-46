@@ -36,7 +36,7 @@ const diffrents  = _.sortBy(_.union(keys1,keys2)).map((key) => {
     else if (!Object.hasOwn(obj2, key)){
         return { type: 'deleted', key: key, val: obj1[key] };
     }
-    else if (typeof obj1[key] === 'object' && typeof obj2[key] === 'object'){
+    else if (_.isObject(obj1[key]) && _.isObject(obj2[key])){
         return  { type: 'recursion', key: key, children: findDiff(obj1[key], obj2[key]) }
     }
     else if (obj1[key] !== obj2[key]){
@@ -46,6 +46,7 @@ const diffrents  = _.sortBy(_.union(keys1,keys2)).map((key) => {
         return { type: 'unchanged', key: key, val: obj1[key] };
     }
 });
+
 return diffrents;
 }
 
