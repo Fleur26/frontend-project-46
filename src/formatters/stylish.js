@@ -1,18 +1,43 @@
 import _ from 'lodash';
+const data = {
 
-const makeFormat = (data) => {
-    const parseData = data.map((obj) => {
-        const {type, key, value, children = 0} = obj;
-
-       switch(obj.type){
-        case 'added':
-            return `+ ${obj.key}: ${obj.value}`;
-       
-       case 'deleted':
-            return `- ${obj.key}: ${obj.value}`;
-        
-        case 'recursion':
-            return `  ${obj.key}: ${makeFormat(children)}`;
-       } 
-    })
 }
+const makeFormat = (value) => {
+    const space = ' ';
+    const iter = (currentValue, depth) => {
+      if (!_.isObject(currentValue)) {
+        return `${currentValue}`;
+      }
+  
+      const indentSize = depth;
+      const lines = Object
+        .values(currentValue)
+        .map((obj) => {
+          switch (obj.type){
+            case 'added':
+              return `${space.repeat(indentSize)}+ ${obj.key}: ${obj.val}`;
+
+            case 'deleted':
+              return `${space.repeat(indentSize)}- ${obj.key}: ${obj.val}`;
+
+            case 'recursion': 
+              return `${space.repeat(indentSize)}  ${obj.key}: ${iter(obj.children, depth + 1)}`;
+            
+            case 'changed': 
+            return `${space.repeat(indentSize)}+ ${obj.key}: ${obj.newVal}\n${space.repeat(indentSize)}- ${obj.key}: ${obj.oldVal}`;
+            default:
+              return `${space.repeat(indentSize)}  ${obj.key}: ${obj.val}`;
+          }
+        });
+  
+      return [
+        '{',
+        ...lines,
+        `${space.repeat(indentSize)}}`,
+      ].join('\n');
+    };
+  
+    return iter(value, 1);
+  };
+  
+  export default makeFormat;

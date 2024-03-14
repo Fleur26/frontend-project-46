@@ -40,11 +40,11 @@ const diffrents  = _.sortBy(_.union(keys1,keys2)).map((key) => {
         return  { type: 'recursion', key: key, children: findDiff(obj1[key], obj2[key]) }
     }
     else if (obj1[key] !== obj2[key]){
-        return { type: 'changed', key: key, val: obj2[key] };
+        return { type: 'changed', key: key, newVal: obj2[key], oldVal: obj1[key] };
     }
-    else if (obj1[key] !== obj2[key]){
-        return { type: 'unchanged', key: key, val: obj1[key] };
-    }
+
+    return { type: 'unchanged', key: key, val: obj1[key] };
+
 });
 
 return diffrents;
