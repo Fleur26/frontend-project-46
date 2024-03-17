@@ -7,12 +7,12 @@ const styleObj = (val) => {
   }
   const keys = Object.keys(val);
   const values = keys.map((key) => {
-  if(_.isObject(val.key)){
-    return `${key}: ${iter(val.key)}`;
+  if(_.isObject(val[key])){
+    return `${key}: ${iter(val[key])}`;
   }
-  return `${key}: ${val.key}`;
+  return `${key}: ${val[key]}`;
 });
-return values;
+return values.join('\n');
 }
 return iter(val);
  }
