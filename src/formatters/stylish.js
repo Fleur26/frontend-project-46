@@ -1,20 +1,23 @@
 import _ from 'lodash';
 
-const styleObj = (val) => {
-  const iter = (val) =>{
+const styleObj = (val, depth) => {
+  const space = ' ';
+
+  const iter = (val, depth) =>{
+    const offset = (depth * 2) - depth;
   if (!_.isObject(val)) {
     return `${val}`;
   }
   const keys = Object.keys(val);
   const values = keys.map((key) => {
   if(_.isObject(val[key])){
-    return `${key}: ${iter(val[key])}`;
+    return `${space.repeat(offset)}  ${key}: ${iter(val[key], depth + 1)}`;
   }
-  return `${key}: ${val[key]}`;
+  return `${space.repeat(offset)}  ${key}: ${val[key]}`;
 });
-return values.join('\n');
+return `{\n ${values.join('\n')} \n}`;
 }
-return iter(val);
+return iter(val, depth);
  }
 const makeFormat = (value) => {
     const space = ' ';
@@ -23,25 +26,25 @@ const makeFormat = (value) => {
         return `${currentValue}`;
       }
   
-      const indentSize = depth;
+      const indentSize = (depth * 2);
       const lines = Object
         .values(currentValue)
         .map((obj) => {
           switch (obj.type){
             case 'added':
-              return `${space.repeat(indentSize)}+ ${obj.key}: ${obj.val}`;
+              return `${space.repeat(indentSize)}+ ${obj.key}: ${styleObj(obj.val, indentSize)}`;
 
             case 'deleted':
-              return `${space.repeat(indentSize)}- ${obj.key}: ${styleObj(obj.val)}`;
+              return `${space.repeat(indentSize)}- ${obj.key}: ${styleObj(obj.val, indentSize)}`;
 
             case 'recursion': 
-              return `${space.repeat(indentSize)}  ${obj.key}: ${iter(obj.children, depth + 1)}`;
+              return `${space.repeat(indentSize)}  ${obj.key}: ${iter(obj.children, indentSize + 1)}`;
             
             case 'changed': 
-              return `${space.repeat(indentSize)}+ ${obj.key}: ${obj.newVal}\n${space.repeat(indentSize)}- ${obj.key}: ${obj.oldVal}`;
+              return `${space.repeat(indentSize)}- ${obj.key}: ${styleObj(obj.oldVal, indentSize)}\n${space.repeat(indentSize)}+ ${obj.key}: ${styleObj(obj.newVal,indentSize)}`;
               
             default:
-              return `${space.repeat(indentSize)}  ${obj.key}: ${obj.val}`;
+              return `${space.repeat(indentSize)}  ${obj.key}: ${styleObj(obj.val, indentSize)}`;
           }
         });
   
