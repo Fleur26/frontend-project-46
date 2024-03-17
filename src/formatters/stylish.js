@@ -1,7 +1,21 @@
 import _ from 'lodash';
-const data = {
 
+const styleObj = (val) => {
+  const iter = (val) =>{
+  if (!_.isObject(val)) {
+    return `${val}`;
+  }
+  const keys = Object.keys(val);
+  const values = keys.map((key) => {
+  if(_.isObject(val.key)){
+    return `${key}: ${iter(val.key)}`;
+  }
+  return `${key}: ${val.key}`;
+});
+return values;
 }
+
+ }
 const makeFormat = (value) => {
     const space = ' ';
     const iter = (currentValue, depth) => {
@@ -18,13 +32,14 @@ const makeFormat = (value) => {
               return `${space.repeat(indentSize)}+ ${obj.key}: ${obj.val}`;
 
             case 'deleted':
-              return `${space.repeat(indentSize)}- ${obj.key}: ${obj.val}`;
+              return `${space.repeat(indentSize)}- ${obj.key}: ${(obj.val)}`;
 
             case 'recursion': 
               return `${space.repeat(indentSize)}  ${obj.key}: ${iter(obj.children, depth + 1)}`;
             
             case 'changed': 
-            return `${space.repeat(indentSize)}+ ${obj.key}: ${obj.newVal}\n${space.repeat(indentSize)}- ${obj.key}: ${obj.oldVal}`;
+              return `${space.repeat(indentSize)}+ ${obj.key}: ${obj.newVal}\n${space.repeat(indentSize)}- ${obj.key}: ${obj.oldVal}`;
+              
             default:
               return `${space.repeat(indentSize)}  ${obj.key}: ${obj.val}`;
           }
