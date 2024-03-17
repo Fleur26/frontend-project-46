@@ -14,7 +14,7 @@ const styleObj = (val) => {
 });
 return values;
 }
-
+return iter(val);
  }
 const makeFormat = (value) => {
     const space = ' ';
@@ -32,7 +32,7 @@ const makeFormat = (value) => {
               return `${space.repeat(indentSize)}+ ${obj.key}: ${obj.val}`;
 
             case 'deleted':
-              return `${space.repeat(indentSize)}- ${obj.key}: ${(obj.val)}`;
+              return `${space.repeat(indentSize)}- ${obj.key}: ${styleObj(obj.val)}`;
 
             case 'recursion': 
               return `${space.repeat(indentSize)}  ${obj.key}: ${iter(obj.children, depth + 1)}`;
