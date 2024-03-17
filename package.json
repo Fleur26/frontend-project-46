@@ -27,6 +27,7 @@
   "homepage": "https://github.com/Fleur26/frontend-project-46#readme",
   "devDependencies": {
     "eslint": "^8.57.0",
-    "eslint-plugin-react": "^7.33.2"
+    "eslint-plugin-react": "^7.34.1",
+    "react": "^18.2.0"
   }
 }
