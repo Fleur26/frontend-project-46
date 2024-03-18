@@ -1,33 +1,32 @@
 import _ from 'lodash';
 
 const styleObj = (val, depth) => {
-  const space = ' ';
-
-  const iter = (val, depth) =>{
+  const space = ' ',
+   iter = (val, depth) =>{
     const offset = (depth * 2) - depth;
-  if (!_.isObject(val)) {
-    return `${val}`;
-  }
-  const keys = Object.keys(val);
-  const values = keys.map((key) => {
-  if(_.isObject(val[key])){
+        if (!_.isObject(val)) {
+        return `${val}`;
+        }
+    const keys = Object.keys(val),
+    values = keys.map((key) => {
+    if(_.isObject(val[key])){
     return `${space.repeat(offset)}  ${key}: ${iter(val[key], depth + 1)}`;
-  }
+    }
   return `${space.repeat(offset)}  ${key}: ${val[key]}`;
 });
 return `{\n ${values.join('\n')} \n}`;
 }
 return iter(val, depth);
- }
-const makeFormat = (value) => {
-    const space = ' ';
-    const iter = (currentValue, depth) => {
+ },
+ makeStylish = (value) => {
+    const space = ' ',
+     iter = (currentValue, depth) => {
       if (!_.isObject(currentValue)) {
         return `${currentValue}`;
       }
   
-      const indentSize = (depth * 2);
-      const lines = Object
+      const indentSize = (depth * 2),
+       lines = Object
         .values(currentValue)
         .map((obj) => {
           switch (obj.type){
@@ -58,4 +57,4 @@ const makeFormat = (value) => {
     return iter(value, 1);
   };
   
-  export default makeFormat;
+  export default makeStylish;
