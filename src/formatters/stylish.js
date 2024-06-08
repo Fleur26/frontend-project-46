@@ -10,7 +10,7 @@ const styleObj = (val, depth) => {
     const keys = Object.keys(val),
     values = keys.map((key) => {
     if(_.isObject(val[key])){
-    return `${space.repeat(offset)}  ${key}: ${iter(val[key], depth + 1)}`;
+      return `${space.repeat(offset)}  ${key}: ${iter(val[key], depth + 1)}`;
     }
   return `${space.repeat(offset)}  ${key}: ${val[key]}`;
 });

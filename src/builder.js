@@ -1,4 +1,7 @@
-export default function buildAst(keys1, keys2){
+import _ from 'lodash';
+import { findDiff } from './logic.js';
+
+export default function buildAst(keys1, keys2, obj1, obj2){
 const diffrents  = _.sortBy(_.union(keys1,keys2)).map((key) => {
     
     if (_.isObject(obj1[key]) && _.isObject(obj2[key])){
