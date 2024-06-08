@@ -26,9 +26,9 @@
   },
   "homepage": "https://github.com/Fleur26/frontend-project-46#readme",
   "devDependencies": {
-    "eslint": "^8.57.0",
+    "eslint": "^9.4.0",
     "eslint-plugin-react": "^7.34.1",
-    "prettier": "3.2.5",
-    "react": "^18.2.0"
+    "globals": "^15.4.0",
+    "prettier": "3.2.5"
   }
 }

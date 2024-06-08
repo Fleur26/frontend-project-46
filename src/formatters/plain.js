@@ -1,38 +1,41 @@
-const changeFormat = (value) => {
-    switch (typeof value) {
-      case 'object':
-        return value === null ? value : '[complex value]';
-      case 'string':
-        return `'${value}'`;
-      default:
-        return value;
-    }
+function getString(value) {
+  switch (typeof value) {
+    case 'object':
+      return value == null ? value : '[complex value]';
+    case 'string':
+      return '${value}';
+    default:
+      return value;
   }
-
-const makePlain = (value) => {
-
-    const iter = (array, path) => {
-        const result = array.map((obj) => {
-          const fullKey = `${path}${obj.key}`;
-          switch(obj.type){
-            case 'added':
-                return `Property '${fullKey}' was added value: ${changeFormat(obj.key)}`;
-
-            case 'deleted':
-                return `Property '${fullKey}' was removed`;
-            
-            case 'changed': 
-                return  `Property '${fullKey}' was updated. From ${changeFormat(obj.oldVal)} to ${changeFormat(obj.newVal)}`;
-            
-            case 'recursion':
-                return iter(obj.children, `${fullKey}.`);
-            default: 
-            return null;
-          }
-    });
-    return result.filter((obj) => obj != null).join('\n');
-        }
-    return iter(value, '');
 }
 
-export default makePlain;
+const data = {
+  added: 'was added with value:',
+  deleted: 'was removed',
+  changed: 'was updated. From',
+};
+
+function getPlain(tree) {
+  function iter(object, path) {
+    const result = object.map((key) => {
+      const fullKey = `${path}${key.key}`;
+      if (key.action === 'deleted') {
+        return `Property '${fullKey}' ${data.deleted}`;
+      }
+      if (key.action === 'added') {
+        return `Property '${fullKey}' ${data.added} ${getString(key.newValue)}`;
+      }
+      if (key.action === 'nested') {
+        return iter(key.children, `${fullKey}.`);
+      }
+      if (key.action === 'changed') {
+        return `Property '${fullKey}' ${data.changed} ${getString(key.oldValue)} to ${getString(key.newValue)}`;
+      }
+      return null;
+    });
+    return result.filter((item) => item != null).join('\n');
+  }
+  return iter(tree, '');
+}
+
+export default getPlain;
