@@ -1,8 +1,6 @@
  
 import fs from 'fs';
 import path from 'path';
-import buildAst from './builder.js';
-
 
 const readFile = (filePath) => {
     const dirName = process.cwd(filePath);
@@ -15,12 +13,5 @@ const getFormat = (fileName) => {
   return result.at(-1);
 }
 
-const findDiff = (obj1, obj2) => {
-const keys1 = Object.keys(obj1);
-const keys2 = Object.keys(obj2);
 
-return buildAst(keys1, keys2, obj1, obj2);
-}
-
-
-export {readFile, findDiff, getFormat};
+export {readFile, getFormat};

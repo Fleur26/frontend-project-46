@@ -5,7 +5,7 @@ const styleObj = (val, depth) => {
    iter = (val, depth) =>{
     const offset = (depth * 2) - depth;
         if (!_.isObject(val)) {
-        return `${val}`;
+        return `'${val}'`;
         }
     const keys = Object.keys(val),
     values = keys.map((key) => {
@@ -36,7 +36,7 @@ return iter(val, depth);
             case 'deleted':
               return `${space.repeat(indentSize)}- ${obj.key}: ${styleObj(obj.val, indentSize)}`;
 
-            case 'recursion': 
+            case 'nested': 
               return `${space.repeat(indentSize)}  ${obj.key}: ${iter(obj.children, indentSize + 1)}`;
             
             case 'changed': 

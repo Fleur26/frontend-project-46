@@ -1,28 +1,45 @@
 import _ from 'lodash';
-import { findDiff } from './logic.js';
 
-export default function buildAst(keys1, keys2, obj1, obj2){
-const diffrents  = _.sortBy(_.union(keys1,keys2)).map((key) => {
-    
-    if (_.isObject(obj1[key]) && _.isObject(obj2[key])){
-        return  { type: 'recursion', key: key, children: findDiff(obj1[key], obj2[key]) }
-    } 
-    else  if(!Object.hasOwn(obj1, key)){
-        return { type: 'added', key: key, val: obj2[key] };
+export default function findDiff(obj1, obj2) {
+  const allKeys = _.sortBy(_.union(_.keys(obj1), _.keys(obj2))).map((key) => {
+    const oldValue = obj1[key];
+    const newValue = obj2[key];
+    if (!_.has(obj2, key)) {
+      return {
+        action: 'deleted',
+        key,
+        oldValue,
+      };
     }
-    else if (!Object.hasOwn(obj2, key)){
-        return { type: 'deleted', key: key, val: obj1[key] };
+    if (!_.has(obj1, key)) {
+      return {
+        action: 'added',
+        key,
+        newValue,
+      };
     }
-    
-    else if (obj1[key] !== obj2[key]){
-        return { type: 'changed', key: key, newVal: obj2[key], oldVal: obj1[key] };
+    if (_.isObject(oldValue) && _.isObject(newValue)) {
+      return {
+        action: 'nested',
+        key,
+        children: findDiff(oldValue, newValue),
+      };
     }
-
-    return { type: 'unchanged', key: key, val: obj1[key] };
-
-});
-
-return diffrents;
+    if (oldValue !== newValue) {
+      return {
+        action: 'changed',
+        key,
+        oldValue,
+        newValue,
+      };
+    }
+    return {
+      action: 'unchanged',
+      key,
+      oldValue,
+    };
+  });
+  return allKeys;
 }
 
 // пока что не стала добавлять функцию по созданию объекта

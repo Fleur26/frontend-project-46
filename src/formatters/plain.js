@@ -5,7 +5,7 @@ function getString(value) {
     case 'string':
       return `${value}`;
     default:
-      return value;
+      return `${value}`;
   }
 }
 
@@ -15,7 +15,7 @@ const data = {
   changed: 'was updated. From',
 };
 
-function getPlain(tree) {
+export default function getPlain(tree) {
   function iter(object, path) {
     const result = object.map((key) => {
       const fullKey = `${path}${key.key}`;
@@ -25,7 +25,7 @@ function getPlain(tree) {
       if (key.action === 'added') {
         return `Property '${fullKey}' ${data.added} ${getString(key.newValue)}`;
       }
-      if (key.action === 'recursion') {
+      if (key.action === 'nested') {
         return iter(key.children, `${fullKey}.`);
       }
       if (key.action === 'changed') {
@@ -38,4 +38,3 @@ function getPlain(tree) {
   return iter(tree, '');
 }
 
-export default getPlain;
