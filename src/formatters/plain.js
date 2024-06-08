@@ -3,7 +3,7 @@ function getString(value) {
     case 'object':
       return value == null ? value : '[complex value]';
     case 'string':
-      return '${value}';
+      return `${value}`;
     default:
       return value;
   }
@@ -25,7 +25,7 @@ function getPlain(tree) {
       if (key.action === 'added') {
         return `Property '${fullKey}' ${data.added} ${getString(key.newValue)}`;
       }
-      if (key.action === 'nested') {
+      if (key.action === 'recursion') {
         return iter(key.children, `${fullKey}.`);
       }
       if (key.action === 'changed') {
