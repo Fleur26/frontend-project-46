@@ -1,58 +1,50 @@
 import _ from 'lodash';
-import path from 'path';
-import fs from 'fs';
 
-function readFile(filePath) {
-  const dirName = process.cwd(filePath);
-  const fullPath = path.resolve(dirName, filePath);
-  return fs.readFileSync(fullPath, 'utf-8');
+const data = {
+  added: '+ ',
+  deleted: '- ',
+  space: '  ',
+};
+
+function getSpace(depth, symbol) {
+  const space = '    ';
+  if (!symbol) {
+    return space.repeat(depth);
+  }
+  if (depth === 0 && !symbol) {
+    return '';
+  }
+  return `${space.repeat(depth)}  ${symbol}`;
 }
 
-function getExtension(filename) {
-  const result = filename.split('.');
-  return result.at(-1);
+function stringify(value, level) {
+  function iter(currentValue, depth) {
+    if (!_.isObject(currentValue)) {
+      return `${currentValue}`;
+    }
+    const lines = Object.entries(currentValue).map(([key, val]) => `${getSpace(depth + 1, data.space)}${key}: ${iter(val, depth + 1)}`);
+    return ['{', ...lines, `${getSpace(depth + 1)}}`].join('\n');
+  }
+  return iter(value, level);
 }
 
-function makeStylish(obj1, obj2) {
-  const allKeys = _.sortBy(_.union(_.keys(obj1), _.keys(obj2))).map((key) => {
-    const oldValue = obj1[key];
-    const newValue = obj2??[key];
-    if (!_.has(obj2, key)) {
-      return {
-        action: 'deleted',
-        key,
-        oldValue,
-      };
-    }
-    if (!_.has(obj1, key)) {
-      return {
-        action: 'added',
-        key,
-        newValue,
-      };
-    }
-    if (_.isObject(oldValue) && _.isObject(newValue)) {
-      return {
-        action: 'nested',
-        key,
-        children: makeStylish(oldValue, newValue),
-      };
-    }
-    if (oldValue !== newValue) {
-      return {
-        action: 'changed',
-        key,
-        oldValue,
-        newValue,
-      };
-    }
-    return {
-      action: 'unchanged',
-      key,
-      oldValue,
-    };
-  });
-  return allKeys;
+export default function makeStylish(tree) {
+  const iter = (object, depth) => {
+    const result = object.map((key) => {
+      switch (key.action) {
+        case 'deleted':
+          return `${getSpace(depth, data.deleted)}${key.key}: ${stringify(key.oldValue, depth)}`;
+        case 'added':
+          return `${getSpace(depth, data.added)}${key.key}: ${stringify(key.newValue, depth)}`;
+        case 'nested':
+          return `${getSpace(depth, data.space)}${key.key}: ${iter(key.children, depth + 1)}`;
+        case 'changed':
+          return [`${getSpace(depth, data.deleted)}${key.key}: ${stringify(key.oldValue, depth)}\n${getSpace(depth, data.added)}${key.key}: ${stringify(key.newValue, depth)}`];
+        default:
+          return `${getSpace(depth, data.space)}${key.key}: ${stringify(key.oldValue, depth)}`;
+      }
+    });
+    return ['{', ...result, `${getSpace(depth)}}`].join('\n');
+  };
+  return iter(tree, 0);
 }
-
-export { readFile, makeStylish, getExtension };

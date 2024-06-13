@@ -42,4 +42,3 @@ export default function findDiff(obj1, obj2) {
   return allKeys;
 }
 
-// пока что не стала добавлять функцию по созданию объекта
