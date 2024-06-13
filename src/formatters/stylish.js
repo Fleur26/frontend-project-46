@@ -1,60 +1,58 @@
 import _ from 'lodash';
+import path from 'path';
+import fs from 'fs';
 
-const styleObj = (val, depth) => {
-  const space = ' ',
-   iter = (val, depth) =>{
-    const offset = (depth * 2) - depth;
-        if (!_.isObject(val)) {
-        return `'${val}'`;
-        }
-    const keys = Object.keys(val),
-    values = keys.map((key) => {
-    if(_.isObject(val[key])){
-      return `${space.repeat(offset)}  ${key}: ${iter(val[key], depth + 1)}`;
-    }
-  return `${space.repeat(offset)}  ${key}: ${val[key]}`;
-});
-return `{\n ${values.join('\n')} \n}`;
+function readFile(filePath) {
+  const dirName = process.cwd(filePath);
+  const fullPath = path.resolve(dirName, filePath);
+  return fs.readFileSync(fullPath, 'utf-8');
 }
-return iter(val, depth);
- },
- makeStylish = (value) => {
-    const space = ' ',
-     iter = (currentValue, depth) => {
-      if (!_.isObject(currentValue)) {
-        return `${currentValue}`;
-      }
-  
-      const indentSize = (depth * 2),
-       lines = Object
-        .values(currentValue)
-        .map((obj) => {
-          switch (obj.type){
-            case 'added':
-              return `${space.repeat(indentSize)}+ ${obj.key}: ${styleObj(obj.val, indentSize)}`;
 
-            case 'deleted':
-              return `${space.repeat(indentSize)}- ${obj.key}: ${styleObj(obj.val, indentSize)}`;
+function getExtension(filename) {
+  const result = filename.split('.');
+  return result.at(-1);
+}
 
-            case 'nested': 
-              return `${space.repeat(indentSize)}  ${obj.key}: ${iter(obj.children, indentSize + 1)}`;
-            
-            case 'changed': 
-              return `${space.repeat(indentSize)}- ${obj.key}: ${styleObj(obj.oldVal, indentSize)}\n${space.repeat(indentSize)}+ ${obj.key}: ${styleObj(obj.newVal,indentSize)}`;
-              
-            default:
-              return `${space.repeat(indentSize)}  ${obj.key}: ${styleObj(obj.val, indentSize)}`;
-          }
-        });
-  
-      return [
-        '{',
-        ...lines,
-        `${space.repeat(indentSize)}}`,
-      ].join('\n');
+function makeStylish(obj1, obj2) {
+  const allKeys = _.sortBy(_.union(_.keys(obj1), _.keys(obj2))).map((key) => {
+    const oldValue = obj1[key];
+    const newValue = obj2??[key];
+    if (!_.has(obj2, key)) {
+      return {
+        action: 'deleted',
+        key,
+        oldValue,
+      };
+    }
+    if (!_.has(obj1, key)) {
+      return {
+        action: 'added',
+        key,
+        newValue,
+      };
+    }
+    if (_.isObject(oldValue) && _.isObject(newValue)) {
+      return {
+        action: 'nested',
+        key,
+        children: makeStylish(oldValue, newValue),
+      };
+    }
+    if (oldValue !== newValue) {
+      return {
+        action: 'changed',
+        key,
+        oldValue,
+        newValue,
+      };
+    }
+    return {
+      action: 'unchanged',
+      key,
+      oldValue,
     };
-  
-    return iter(value, 1);
-  };
-  
-  export default makeStylish;
+  });
+  return allKeys;
+}
+
+export { readFile, makeStylish, getExtension };

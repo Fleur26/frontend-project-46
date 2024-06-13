@@ -3,9 +3,9 @@ function getString(value) {
     case 'object':
       return value == null ? value : '[complex value]';
     case 'string':
-      return `${value}`;
+      return `'${value}'`;
     default:
-      return `${value}`;
+      return value;
   }
 }
 
@@ -15,7 +15,7 @@ const data = {
   changed: 'was updated. From',
 };
 
-export default function getPlain(tree) {
+function getPlain(tree) {
   function iter(object, path) {
     const result = object.map((key) => {
       const fullKey = `${path}${key.key}`;
@@ -37,4 +37,6 @@ export default function getPlain(tree) {
   }
   return iter(tree, '');
 }
+
+export default getPlain;
 

@@ -1,4 +1,4 @@
-import makeStylish from './stylish.js';
+import {makeStylish} from './stylish.js';
 import getPlain from './plain.js';
 
 export default function makeFormat(tree, formatName = 'stylish') {
