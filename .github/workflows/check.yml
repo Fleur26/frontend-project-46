@@ -1,3 +1,7 @@
+Хохолева Валерия, [6/21/24 12:46 PM]
+[![Build Status](https://travis-ci.com/username/projectname.svg?branch=master)](https://travis-ci.com/username/projectname)
+
+Хохолева Валерия, [6/21/24 1:31 PM]
 # file: .github/workflows/hello-world.yml
 name: check project 2
 # on – определяет события, которые запускают воркфлоу
