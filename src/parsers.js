@@ -10,4 +10,5 @@ const parse = (file, format) => {
       throw new Error(`Format file ${file} is not correct`);
   }
 };
+// eslint-disable-next-line import/prefer-default-export
 export { parse };
