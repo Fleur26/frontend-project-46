@@ -10,4 +10,4 @@ const parse = (file, format) => {
       throw new Error(`Format file ${file} is not correct`);
   }
 };
-export default parse;
+export { parse };
