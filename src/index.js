@@ -1,6 +1,6 @@
 import { readFile, getFormat } from './logic.js';
 import findDiff from './builder.js';
-import { parse } from './parsers.js';
+import parse from './parsers.js';
 import makeFormat from './formatters/index.js';
 
 const genDiff = (filepath1, filepath2, format = 'stylish') => {
